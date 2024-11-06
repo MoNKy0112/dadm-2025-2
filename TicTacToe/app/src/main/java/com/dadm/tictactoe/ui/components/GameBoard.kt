@@ -1,4 +1,4 @@
-package com.dadm.tictactoe.ui
+package com.dadm.tictactoe.ui.components
 
 import com.dadm.tictactoe.ui.graphics.TicTacToeColorPalette
 
@@ -22,7 +22,7 @@ fun GameBoard(viewModel: TicTacToeViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxSize()
+            .fillMaxWidth()
     ){
 
         viewModel.game.board.forEachIndexed { rowIndex, row ->
@@ -54,34 +54,6 @@ fun GameBoard(viewModel: TicTacToeViewModel) {
         Button(onClick = { viewModel.resetGame() }) {
             Text("Reiniciar")
         }
-    }
-}
-
-@Composable
-fun GameCell(player: Player, onClick:()->Unit) {
-    Box(modifier = Modifier
-        .size(100.dp)
-        .padding(4.dp)
-        .aspectRatio(1f)
-        .background(
-            color = when(player){
-                Player.X -> TicTacToeColorPalette.XPlayerColor
-                Player.O -> TicTacToeColorPalette.OPlayerColor
-                Player.NONE -> TicTacToeColorPalette.NonePlayerColor
-            }
-        )
-        .clickable { onClick() }
-    ){
-        Text(
-            text = when(player){
-                Player.X -> "X"
-                Player.O -> "O"
-                Player.NONE -> ""
-            },
-            style = MaterialTheme.typography.headlineMedium,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.Center)
-        )
     }
 }
 

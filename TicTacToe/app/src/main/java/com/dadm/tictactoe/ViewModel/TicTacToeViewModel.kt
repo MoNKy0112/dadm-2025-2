@@ -16,29 +16,48 @@ class TicTacToeViewModel: ViewModel() {
         private set
 
     var gameMode by mutableStateOf(GameMode.TWO_PLAYER)
-        private set
+        public set
 
-    fun setGameMode(mode: GameMode) {
+    fun updateGameMode(mode: GameMode) {
         gameMode = mode
         resetGame()
     }
 
     fun makeMove(row: Int, col: Int) {
-        println(row)
-        println(col)
         if (game.gameState != GameState.PLAYING) return
 
         if (game.board[row][col] == Player.NONE) {
-            val newBoard = game.board.mapIndexed { r, rows ->
-                rows.mapIndexed { c, player ->
-                    if (r == row && c == col) game.currentPlayer else player
-                }
+            updateBoard(row, col, game.currentPlayer)
+
+            if (gameMode == GameMode.SINGLE_PLAYER && game.gameState == GameState.PLAYING) {
+                makeCpuMove()
             }
+        }
+    }
 
-            val newPlayer = if (game.currentPlayer == Player.X) Player.O else Player.X
-            val newGameState = checkGameState(newBoard)
+    private fun updateBoard(row: Int, col: Int, player: Player) {
+        val newBoard = game.board.mapIndexed { r, rows ->
+            rows.mapIndexed { c, player ->
+                if (r == row && c == col) game.currentPlayer else player
+            }
+        }
 
-            game = game.copy(board = newBoard, currentPlayer = newPlayer, gameState = newGameState)
+        val newPlayer = if (game.currentPlayer == Player.X) Player.O else Player.X
+        val newGameState = checkGameState(newBoard)
+
+        game = game.copy(board = newBoard, currentPlayer = newPlayer, gameState = newGameState)
+    }
+
+    private fun makeCpuMove(){
+        val emptyCells = game.board.flatMapIndexed { row, rows ->
+            rows.mapIndexedNotNull { col, cell ->
+                if (cell == Player.NONE) row to col else null
+            }
+        }
+
+        if (emptyCells.isNotEmpty()) {
+            val (cpuRow, cpuCol) = emptyCells.random()
+            updateBoard(cpuRow, cpuCol, Player.O)
         }
     }
 
