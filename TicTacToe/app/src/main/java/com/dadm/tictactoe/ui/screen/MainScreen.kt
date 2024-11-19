@@ -48,7 +48,7 @@ fun MainMenuScreen(navController: NavController, viewModel: TicTacToeViewModel =
             text = "Jugador vs CPU",
             onClick = {
                 viewModel.updateGameMode(GameMode.SINGLE_PLAYER)
-                navController.navigate("game")
+                navController.navigate("difficulty_selection")
             })
 
         GameModeButton(

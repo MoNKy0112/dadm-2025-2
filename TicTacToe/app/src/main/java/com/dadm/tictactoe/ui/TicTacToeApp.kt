@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dadm.tictactoe.ViewModel.TicTacToeViewModel
+import com.dadm.tictactoe.ui.screen.DifficultySelectionScreen
 import com.dadm.tictactoe.ui.screen.GameScreen
 import com.dadm.tictactoe.ui.screen.MainMenuScreen
 
@@ -19,6 +20,9 @@ fun TicTacToeApp(viewModel: TicTacToeViewModel = viewModel()){
         }
         composable("game"){
             GameScreen(navController = navController, viewModel = viewModel)
+        }
+        composable("difficulty_selection"){
+            DifficultySelectionScreen(navController = navController, viewModel = viewModel)
         }
     }
 

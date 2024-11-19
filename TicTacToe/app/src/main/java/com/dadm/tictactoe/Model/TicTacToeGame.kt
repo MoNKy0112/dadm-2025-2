@@ -10,5 +10,5 @@ enum class GameState {
 data class TicTacToeGame(
     val board: List<List<Player>> = List(3) { List(3) { Player.NONE } },
     val currentPlayer: Player = Player.X,
-    val gameState: GameState = GameState.PLAYING
+    val gameState: GameState = GameState.PLAYING,
 )

@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.dadm.tictactoe.ViewModel.GameMode
 import com.dadm.tictactoe.ViewModel.TicTacToeViewModel
 import com.dadm.tictactoe.ui.components.GameBoard
 
@@ -19,6 +20,17 @@ fun GameScreen(navController: NavController, viewModel: TicTacToeViewModel) {
     Column {
         // button to return to the main menu
         GameBoard(viewModel = viewModel)
+        if (viewModel.gameMode == GameMode.SINGLE_PLAYER){
+            Button(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                onClick = {
+                    navController.navigate("difficulty_selection")
+                }) {
+                Text("Cambiar dificultad")
+            }
+        }
         Button(
             modifier = Modifier
                 .padding(16.dp)
