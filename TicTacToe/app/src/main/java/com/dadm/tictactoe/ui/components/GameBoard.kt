@@ -51,9 +51,9 @@ fun GameBoard(viewModel: TicTacToeViewModel) {
             else -> {}
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { viewModel.resetGame() }) {
+        /*Button(onClick = { viewModel.resetGame() }) {
             Text("Reiniciar")
-        }
+        }*/
     }
 }
 

@@ -20,7 +20,7 @@ fun GameScreen(navController: NavController, viewModel: TicTacToeViewModel) {
     Column {
         // button to return to the main menu
         GameBoard(viewModel = viewModel)
-        if (viewModel.gameMode == GameMode.SINGLE_PLAYER){
+        /*if (viewModel.gameMode == GameMode.SINGLE_PLAYER){
             Button(
                 modifier = Modifier
                     .padding(16.dp)
@@ -39,7 +39,7 @@ fun GameScreen(navController: NavController, viewModel: TicTacToeViewModel) {
                 navController.navigate("main_menu")
             }) {
             Text("Regresar al menú principal")
-        }
+        }*/
     }
 }
 

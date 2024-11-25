@@ -1,29 +1,36 @@
 package com.dadm.tictactoe.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dadm.tictactoe.ViewModel.TicTacToeViewModel
-import com.dadm.tictactoe.ui.screen.DifficultySelectionScreen
-import com.dadm.tictactoe.ui.screen.GameScreen
-import com.dadm.tictactoe.ui.screen.MainMenuScreen
+import com.dadm.tictactoe.ui.components.BottomNavMenu
+import com.dadm.tictactoe.ui.navigation.TicTacToeNavHost
 
 @Composable
 fun TicTacToeApp(viewModel: TicTacToeViewModel = viewModel()){
     val navController = rememberNavController()
+    //TicTacToeNavHost(navController = navController, viewModel = viewModel)
 
-    NavHost(navController = navController, startDestination = "main_menu"){
-        composable("main_menu"){
-            MainMenuScreen(navController = navController, viewModel = viewModel)
+    Scaffold (
+        bottomBar = {
+            BottomNavMenu(navController = navController, viewModel = viewModel, context = LocalContext.current)
         }
-        composable("game"){
-            GameScreen(navController = navController, viewModel = viewModel)
-        }
-        composable("difficulty_selection"){
-            DifficultySelectionScreen(navController = navController, viewModel = viewModel)
+    ){innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)){
+            TicTacToeNavHost(navController = navController, viewModel = viewModel)
         }
     }
+}
 
+@Composable
+@Preview(showBackground = true)
+fun DefaultPreview() {
+    TicTacToeApp()
 }
