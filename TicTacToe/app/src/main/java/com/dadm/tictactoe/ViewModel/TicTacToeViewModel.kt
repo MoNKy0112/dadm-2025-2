@@ -2,9 +2,13 @@ package com.dadm.tictactoe.ViewModel
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dadm.tictactoe.Model.GameState
 import com.dadm.tictactoe.Model.Player
 import com.dadm.tictactoe.Model.TicTacToeGame
+import com.dadm.tictactoe.utils.SoundUseCase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 enum class GameMode {
     SINGLE_PLAYER,
@@ -15,7 +19,8 @@ enum class GameMode {
 enum class Difficulty {
     EASY, MEDIUM, IMPOSSIBLE, NONE
 }
-class TicTacToeViewModel: ViewModel() {
+class TicTacToeViewModel(private val soundUseCase: SoundUseCase? = null) : ViewModel() {
+
     var game by mutableStateOf(TicTacToeGame())
         private set
 
@@ -39,25 +44,45 @@ class TicTacToeViewModel: ViewModel() {
         if (game.gameState != GameState.PLAYING) return
 
         if (game.board[row][col] == Player.NONE) {
-            updateBoard(row, col, game.currentPlayer)
+            updateBoard(row, col)
 
             if (gameMode == GameMode.SINGLE_PLAYER && game.gameState == GameState.PLAYING) {
-                makeCpuMove()
+                handleCpuTurn()
+                soundUseCase?.playMoveSound(2)
             }
         }
     }
 
-    private fun updateBoard(row: Int, col: Int, player: Player) {
+    private fun handleCpuTurn() {
+        viewModelScope.launch {
+            delay(1000) // Añade un retraso de 1 segundo
+            makeCpuMove() // Llama a la lógica para que la CPU haga su jugada
+        }
+    }
+
+    private fun updateBoard(row: Int, col: Int) {
         val newBoard = game.board.mapIndexed { r, rows ->
             rows.mapIndexed { c, player ->
                 if (r == row && c == col) game.currentPlayer else player
             }
         }
 
+        if (game.currentPlayer == Player.X)
+            soundUseCase?.playMoveSound(2)
+        else
+            soundUseCase?.playMoveSound(1)
+
         val newPlayer = if (game.currentPlayer == Player.X) Player.O else Player.X
         val newGameState = checkGameState(newBoard)
 
+
+        if(newGameState == GameState.X_WON || (newGameState == GameState.O_WON && gameMode == GameMode.TWO_PLAYER)){
+            print("Ganador: ${game.currentPlayer}")
+            soundUseCase?.playWinSound()
+        }
+
         game = game.copy(board = newBoard, currentPlayer = newPlayer, gameState = newGameState)
+
     }
 
     private fun makeCpuMove() {
@@ -67,13 +92,13 @@ class TicTacToeViewModel: ViewModel() {
         if (difficulty == Difficulty.IMPOSSIBLE || difficulty == Difficulty.MEDIUM){
             // 1. Intentar ganar
             findMoveInLines(board, Player.O)?.let { (row, col) ->
-                updateBoard(row, col, Player.O)
+                updateBoard(row, col)
                 return
             }
 
             // 2. Bloquear al jugador
             findMoveInLines(board, Player.X)?.let { (row, col) ->
-                updateBoard(row, col, Player.O)
+                updateBoard(row, col)
                 return
             }
         }
@@ -81,7 +106,7 @@ class TicTacToeViewModel: ViewModel() {
         // 3. Estrategia (Centro y esquinas)
         if (difficulty == Difficulty.IMPOSSIBLE) {
             findStrategicMove()?.let { (row, col) ->
-                updateBoard(row, col, Player.O)
+                updateBoard(row, col)
                 return
             }
         }
@@ -95,7 +120,7 @@ class TicTacToeViewModel: ViewModel() {
 
         if (emptyCells.isNotEmpty()) {
             val (row, col) = emptyCells.random()
-            updateBoard(row, col, Player.O)
+            updateBoard(row, col)
         }
     }
 
@@ -166,8 +191,12 @@ class TicTacToeViewModel: ViewModel() {
             listOf(board[0][2], board[1][1], board[2][0])
         )
 
-        if (lines.any {it.all { player -> player == Player.X } }) return GameState.X_WON
-        if (lines.any {it.all { player -> player == Player.O } }) return GameState.O_WON
+        if (lines.any {it.all { player -> player == Player.X } }) {
+            return GameState.X_WON
+        }
+        if (lines.any {it.all { player -> player == Player.O } }) {
+            return GameState.O_WON
+        }
         if (board.all { it.all { player -> player != Player.NONE } }) return GameState.DRAW
 
         return GameState.PLAYING

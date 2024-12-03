@@ -86,5 +86,6 @@ fun GameModeButton(text: String, onClick: () -> Unit, buttonColors: ButtonColors
 @Preview(showBackground = true)
 @Composable
 fun MainMenuScreenPreview() {
-    MainMenuScreen(navController = rememberNavController(), viewModel = TicTacToeViewModel())
+    MainMenuScreen(navController = rememberNavController(), viewModel = TicTacToeViewModel()
+    )
 }

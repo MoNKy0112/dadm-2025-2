@@ -76,5 +76,6 @@ Button(
 @Preview(showBackground = true)
 @Composable
 fun DifficultySelectionScreenPreview() {
-    DifficultySelectionScreen(navController = rememberNavController(), viewModel = TicTacToeViewModel())
+    DifficultySelectionScreen(navController = rememberNavController(), viewModel = TicTacToeViewModel()
+    )
 }
