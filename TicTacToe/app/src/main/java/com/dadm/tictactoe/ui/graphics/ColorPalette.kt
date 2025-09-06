@@ -11,6 +11,7 @@ object TicTacToeColorPalette {
     val OPlayerColor = Color(0xFFE24949)
     val OPlayerWinColor = Color(0xFFFF0000)
     val NonePlayerColor = Color(0xFFA0A0A0)
+    val BorderColor = Color(0xFF000000)
     val BackgroundColor = Color(0xFFE0E0E0)
     val ButtonColor = Color(0xFFE0E0E0)
     val ButtonTextColor = Color(0xFF000000)
