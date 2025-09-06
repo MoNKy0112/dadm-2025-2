@@ -28,7 +28,7 @@ fun BottomNavMenu(navController: NavController, viewModel: TicTacToeViewModel, c
 
     val items = listOf(
         BottomMenuScreen.MainMenu,
-        BottomMenuScreen.Game,
+        //BottomMenuScreen.Game,
         BottomMenuScreen.DifficultySelection,
         BottomMenuScreen.About,
         BottomMenuScreen.Exit

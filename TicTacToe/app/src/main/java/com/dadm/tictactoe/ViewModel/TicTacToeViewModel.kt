@@ -42,7 +42,7 @@ class TicTacToeViewModel(private val soundUseCase: SoundUseCase? = null) : ViewM
 
     fun makeMove(row: Int, col: Int) {
         if (game.gameState != GameState.PLAYING) return
-
+        if (gameMode == GameMode.SINGLE_PLAYER && game.currentPlayer == Player.O) return
         if (game.board[row][col] == Player.NONE) {
             updateBoard(row, col)
 
@@ -55,7 +55,7 @@ class TicTacToeViewModel(private val soundUseCase: SoundUseCase? = null) : ViewM
 
     private fun handleCpuTurn() {
         viewModelScope.launch {
-            delay(1000) // Añade un retraso de 1 segundo
+            delay(500) // Añade un retraso de 1 segundo
             makeCpuMove() // Llama a la lógica para que la CPU haga su jugada
         }
     }
