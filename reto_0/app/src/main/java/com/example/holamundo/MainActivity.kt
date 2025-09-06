@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +51,7 @@ fun HolaMundoApp() {
 
 
 fun generateRandomColor(): Color {
-    val red = (30..255).random()
+    val red = (30..255).
     val green = (30..255).random()
     val blue = (30..255).random()
     return Color(red, green, blue)
