@@ -1,7 +1,9 @@
 package com.dadm.tictactoe.ViewModel
 
+
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.dadm.tictactoe.Model.GameState
 import com.dadm.tictactoe.Model.Player
@@ -9,6 +11,7 @@ import com.dadm.tictactoe.Model.TicTacToeGame
 import com.dadm.tictactoe.utils.SoundUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.dadm.tictactoe.utils.PreferencesManager
 
 enum class GameMode {
     SINGLE_PLAYER,
@@ -19,10 +22,28 @@ enum class GameMode {
 enum class Difficulty {
     EASY, MEDIUM, IMPOSSIBLE, NONE
 }
-class TicTacToeViewModel(private val soundUseCase: SoundUseCase? = null) : ViewModel() {
 
-    var game by mutableStateOf(TicTacToeGame())
+class TicTacToeViewModel(
+    private val soundUseCase: SoundUseCase? = null,
+    private val prefs: PreferencesManager? = null,
+    private val state: SavedStateHandle? = null
+) : ViewModel() {
+
+    var xWins by mutableStateOf(prefs?.getWins("X") ?: 0)
         private set
+
+    var oWins by mutableStateOf(prefs?.getWins("O") ?: 0)
+        private set
+
+    var draws by mutableStateOf(prefs?.getWins("DRAW") ?: 0)
+        private set
+
+    var game by mutableStateOf(
+        state?.get<TicTacToeGame>("game") ?:
+        TicTacToeGame()
+    )
+        private set
+
 
     var gameMode by mutableStateOf(GameMode.TWO_PLAYER)
         private set
@@ -81,8 +102,11 @@ class TicTacToeViewModel(private val soundUseCase: SoundUseCase? = null) : ViewM
             soundUseCase?.playWinSound()
         }
 
-        game = game.copy(board = newBoard, currentPlayer = newPlayer, gameState = newGameState)
+        val newGame = game.copy(board = newBoard, currentPlayer = newPlayer, gameState = newGameState)
 
+        game = newGame
+        state?.set("game", newGame)
+        print(state)
     }
 
     private fun makeCpuMove() {
@@ -192,12 +216,20 @@ class TicTacToeViewModel(private val soundUseCase: SoundUseCase? = null) : ViewM
         )
 
         if (lines.any {it.all { player -> player == Player.X } }) {
+            xWins++
+            prefs?.saveWins("X", xWins)
             return GameState.X_WON
         }
         if (lines.any {it.all { player -> player == Player.O } }) {
+            oWins++
+            prefs?.saveWins("O", oWins)
             return GameState.O_WON
         }
-        if (board.all { it.all { player -> player != Player.NONE } }) return GameState.DRAW
+        if (board.all { it.all { player -> player != Player.NONE } }) {
+            draws++
+            prefs?.saveWins("DRAW", draws)
+            return GameState.DRAW
+        }
 
         return GameState.PLAYING
     }
