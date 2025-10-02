@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "586437946979",
+    "project_id": "tictactoe-38c12",
+    "storage_bucket": "tictactoe-38c12.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586437946979:android:67071a7b8ed8555d371256",
+        "android_client_info": {
+          "package_name": "com.jomoncaleanoa.tictactoemultiplayer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNKC6Ysp2vBCPxqQ7fVHK41hFTG74mJUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
