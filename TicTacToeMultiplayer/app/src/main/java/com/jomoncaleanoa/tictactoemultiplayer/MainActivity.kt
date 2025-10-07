@@ -10,38 +10,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.jomoncaleanoa.tictactoemultiplayer.ui.navigation.TicTacToeNavHost
+import com.jomoncaleanoa.tictactoemultiplayer.ui.screens.LobbyScreen
 import com.jomoncaleanoa.tictactoemultiplayer.ui.theme.TicTacToeMultiplayerTheme
+import com.jomoncaleanoa.tictactoemultiplayer.utils.PreferencesManager
+import com.jomoncaleanoa.tictactoemultiplayer.utils.SoundUseCase
+import com.jomoncaleanoa.tictactoemultiplayer.viewModel.GameViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val prefs = PreferencesManager(this)
+        val viewModel = GameViewModel( context = this, prefs = prefs )
         enableEdgeToEdge()
         setContent {
-            TicTacToeMultiplayerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            TicTacToeNavHost(navController = androidx.navigation.compose.rememberNavController(), gameViewModel = viewModel)
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TicTacToeMultiplayerTheme {
-        Greeting("Android")
     }
 }
