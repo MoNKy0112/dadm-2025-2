@@ -242,7 +242,7 @@ class MainActivity : ComponentActivity(), LocationListener {
 
     override fun onLocationChanged(location: Location) {
         userLocation = GeoPoint(location.latitude, location.longitude)
-        mapView.overlays.removeAll { it is Marker && it.title != "Aqui estas tu" }
+
 
         // Marcador de ubicación del usuario
         val marker = Marker(mapView)
@@ -260,6 +260,7 @@ class MainActivity : ComponentActivity(), LocationListener {
     private fun getRealPOIs(center: GeoPoint, radioKm: Double) {
         Thread {
             try {
+                mapView.overlays.removeAll { it is Marker && it.title != "Aqui estas tu" }
                 val overpassUrl = "https://overpass-api.de/api/interpreter"
                 val prefs = getSharedPreferences("config", Context.MODE_PRIVATE)
                 val selectedCategories = prefs.getStringSet("selected_categories", setOf("hospital", "school", "restaurant")) ?: setOf()
